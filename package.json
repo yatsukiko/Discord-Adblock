@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "@cliqz/adblocker-electron": "^1.23.8",
+    "cross-fetch": "^3.1.5"
+  },
+  "name": "dicblock",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yatsukiko/dicblock.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/yatsukiko/dicblock/issues"
+  },
+  "homepage": "https://github.com/yatsukiko/dicblock#readme",
+  "description": ""
+}
