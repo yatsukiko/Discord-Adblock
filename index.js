@@ -22,12 +22,33 @@ module.exports = class Dicblock extends Plugin {
 				  console.log('coppied package.json');
 				});
 
-				exec('npm i', {
-				  cwd: src
-				}, function(error, stdout, stderr) {
-				  console.log(stdout)
+				var npmi = spawn('npm', ['i'], {cwd: src, shell: true});
+				npmi.stdout.on('data', (data) => {
+				console.log(`stdout: ${data}`);
 				});
 
+				npmi.stderr.on('data', (data) => {
+				  console.error(`stderr: ${data}`);
+				});
+
+				npmi.on('close', (code) => {
+				  console.log(`npm i'd`);
+				});
+
+				fs.readFile(src + "browserWindow.js", 'utf8', function (err,data) {
+				  if (err) {
+				    return console.log(err);
+				  }
+				  fs.writeFile(src + "browserWindows.js.bak", data, 'utf8', function (err) {
+				     if (err) return console.log(err);
+				  });
+
+				  var result = data.replace('const win = new BrowserWindow(opts);', 'const win = new BrowserWindow(opts); \n 	ElectronBlocker.fromPrebuiltAdsAndTracking(fetch).then((blocker) => { \n 	blocker.enableBlockingInSession(win.webContents.session);\n 	});');
+
+				  fs.writeFile(src + "browserWindow.js", result, 'utf8', function (err) {
+				     if (err) return console.log(err);
+				  });
+				});
 
 				this.updateSetting("Dinjected", true)
 				console.log("injected")
@@ -47,9 +68,5 @@ module.exports = class Dicblock extends Plugin {
 				this.updateSetting("Dinjected", false)
 				console.log("uninjected")
 			}
-
-		//ElectronBlocker.fromPrebuiltAdsAndTracking(fetch).then((blocker) => {
-		  //blocker.enableBlockingInSession(win.webContents.session);
-		//});
 	}
 }
