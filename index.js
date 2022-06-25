@@ -46,7 +46,7 @@ module.exports = class Dicblock extends Plugin {
 					//
 
 					//doing twice coz im too dumb to do it in one go
-				  var codei = data.replace('const win = new BrowserWindow(opts);', 'const win = new BrowserWindow(opts); \n 	ElectronBlocker.fromPrebuiltAdsAndTracking(fetch).then((blocker) => { \n 	blocker.enableBlockingInSession(win.webContents.session);\n 	});');
+				  var codei = data.replace('const win = new BrowserWindow(opts);', 'const win = new BrowserWindow(opts); \n 	ElectronBlocker.fromPrebuiltAdsOnly(fetch).then((blocker) => { \n 	blocker.enableBlockingInSession(win.webContents.session);\n 	});');
 					var dependeciesi = codei.replace("const { BrowserWindow } = require('electron');", "const { BrowserWindow } = require('electron');\nvar { ElectronBlocker } = require('@cliqz/adblocker-electron');\nvar fetch = require('cross-fetch');");
 				  fs.writeFile(src + "browserWindow.js", codei, 'utf8', function (err) {
 				     if (err) return console.log(err);
