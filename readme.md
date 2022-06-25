@@ -1,6 +1,6 @@
 # Adblock for discord using [adblocker lib](https://github.com/ghostery/adblocker/blob/master/packages/adblocker-electron/README.md)
 
-This plugin mostly exists because of ads in youtube watch together, it also blocks discord's trackers if you're into that.
+This plugin mostly exists because of ads in youtube watch together, but it also blocks any other ads if they exist.
 
 `git clone https://github.com/ghostery/adblocker`
 
