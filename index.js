@@ -4,69 +4,103 @@ const Settings = require('./Settings')
 const fs = require('fs');
 const { join } = require('path');
 const { spawn } = require("child_process");
-//var {win} = require(join(__dirname,"../../../browserWindow.js"))
-//var { ElectronBlocker } = require("@cliqz/adblocker-electron");
-//var fetch = require("cross-fetch");
 const src = join(__dirname,'../../../')
+var imdoingsomethingleavemealone
 
 module.exports = class Dicblock extends Plugin {
 	startPlugin () {
 	powercord.api.settings.registerSettings(this.entityID, {
 			category: this.entityID,
 			label: 'Dicblock',
-			render: props => React.createElement(Settings, {...props, inject, uninject})
+			render: props => React.createElement(Settings, {...props, gInject})
 		  })
-			const inject = function() {
-				fs.copyFile(join(__dirname,'package.json'), src + "package.json", (err) => {
-				  if (err) throw err;
-				  console.log('coppied package.json');
-				});
+			const gInject = function() {
+				if (imdoingsomethingleavemealone == true){
+					console.log("don't touch me.")
+				} else{
+					if (this.getSetting('Dinjected') == true){
+						uninject()
+					}else {
+						inject()
+					}
+				}
+			}
 
-				var npmi = spawn('npm', ['i'], {cwd: src, shell: true});
-				npmi.stdout.on('data', (data) => {
-				console.log(`stdout: ${data}`);
-				});
+			const inject = ()=>{
+				imdoingsomethingleavemealone = true
 
-				npmi.stderr.on('data', (data) => {
-				  console.error(`stderr: ${data}`);
+				//copy package.json to src
+				fs.copyFile(join(__dirname,'package.json'), src + "package.json", () => {
+					this.settings.set("cppack", true) //`this` is undefined
 				});
+				//
 
-				npmi.on('close', (code) => {
-				  console.log(`npm i'd`);
-				});
-
-				fs.readFile(src + "browserWindow.js", 'utf8', function (err,data) {
+				//backup current browser.js
+				fs.readFile(src + "browserWindow.js", 'utf8', (err,data) => {
 				  if (err) {
 				    return console.log(err);
 				  }
-				  fs.writeFile(src + "browserWindows.js.bak", data, 'utf8', function (err) {
+				  fs.writeFile(src + "browserWindow.js.bak", data, 'utf8', function (err) {
 				     if (err) return console.log(err);
 				  });
+					//
 
-				  var result = data.replace('const win = new BrowserWindow(opts);', 'const win = new BrowserWindow(opts); \n 	ElectronBlocker.fromPrebuiltAdsAndTracking(fetch).then((blocker) => { \n 	blocker.enableBlockingInSession(win.webContents.session);\n 	});');
-
-				  fs.writeFile(src + "browserWindow.js", result, 'utf8', function (err) {
+					//doing twice coz im too dumb to do it in one go
+				  var codei = data.replace('const win = new BrowserWindow(opts);', 'const win = new BrowserWindow(opts); \n 	ElectronBlocker.fromPrebuiltAdsAndTracking(fetch).then((blocker) => { \n 	blocker.enableBlockingInSession(win.webContents.session);\n 	});');
+					var dependeciesi = codei.replace("const { BrowserWindow } = require('electron');", "const { BrowserWindow } = require('electron');\nvar { ElectronBlocker } = require('@cliqz/adblocker-electron');\nvar fetch = require('cross-fetch');");
+				  fs.writeFile(src + "browserWindow.js", codei, 'utf8', function (err) {
 				     if (err) return console.log(err);
+
 				  });
+					fs.writeFile(src + "browserWindow.js", dependeciesi, 'utf8', function (err) {
+						if (err) return console.log(err);
+				 });
+				this.settings.set("browserinj", true)
 				});
+				//
 
-				this.updateSetting("Dinjected", true)
-				console.log("injected")
+				//get modules
+				var npmi = spawn('npm', ['i'], {cwd: src, shell: true});
+				npmi.on('close', (code) => {
+					this.settings.set("npmdone", true)
+					imdoingsomethingleavemealone = false
+				});
+				//
+
+				this.settings.set("Dinjected", true)
 			}
-			const uninject = function() {
-				fs.unlink(src + "package.json", (err) => {
-					if (err) throw err;
-					console.log('removed package.json');
-				});
+
+
+			const uninject = ()=>{
+				imdoingsomethingleavemealone = true
+				//remove package.json
+				fs.unlink(src + "package.json", (err) => {});
 				fs.unlink(src + "package-lock.json", (err) => {
-					if (err) throw err;
-					console.log('removed package-lock.json');
+					this.settings.set("cppack", false)
 				});
-				fs.rm(src + "node_modules", { recursive: true, force: true }, () => console.log('removed modules'));
+				//
 
+				//restore injected browserWindow
+				if (fs.existsSync(src + "browserWindow.js.bak")) {
+					fs.unlink(src + "browserWindow.js", (err) => {
+						if (err) throw err;
+					});
+					fs.rename(src + "browserWindow.js.bak", src + "browserWindow.js", (err) => {
+							if ( err ) console.log('ERROR: ' + err);
+					this.settings.set("browserinj", false)
+					});
+				}else {
+					console.log("no backup found")
+				}
+				//
 
-				this.updateSetting("Dinjected", false)
-				console.log("uninjected")
+				//remove modules
+				fs.rm(src + "node_modules", { recursive: true, force: true }, () => {
+					this.settings.set("npmdone", false)
+					imdoingsomethingleavemealone = false
+				});
+				//
+				this.settings.set("Dinjected", false)
 			}
 	}
 }

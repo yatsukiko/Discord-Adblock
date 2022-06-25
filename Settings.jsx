@@ -1,26 +1,43 @@
 const { React } = require('powercord/webpack')
 const { SwitchItem } = require('powercord/components/settings')
-const { Button } = require('powercord/components');
+const { Button, Card } = require('powercord/components');
 module.exports = class Settings extends React.PureComponent {
 		render() {
-		const { getSetting, updateSetting } = this.props;
+		const { getSetting, updateSetting, toggleSetting } = this.props;
         return <>
 						<SwitchItem
-								note='Injected?'
+								note='Current status: '
 								value={getSetting('Dinjected', false)}
-								onChange={() => console.log("nothing yet")}
+								onChange={() => {this.props.gInject()}}
 							>
-								Inject
+								Inject Dicblock
 						</SwitchItem>
 
 
-						<Button color={Button.Colors.GREEN} onClick={() => {
-								this.props.inject()
-							}}>inject</Button>
+						<Card className='powercord-account powercord-text'>
+						Below here are current statuses for each injection step, these are not clickable.
+						</Card>
 
-						<Button color={Button.Colors.GREEN} onClick={() => {
-								this.props.uninject()
-							}}>uninject</Button>
+
+						<SwitchItem
+								note='this should be quick,  if its not, check console'
+								value={getSetting('cppack', false)}
+							>
+								Package.json coppied?
+						</SwitchItem>
+						<SwitchItem
+								note='this should be quick,  if its not, check console'
+								value={getSetting('browserinj', false)}
+							>
+								browserWindow.js patched?
+						</SwitchItem>
+						<SwitchItem
+								note='this can take some time, if its same status after few mins check console'
+								value={getSetting('npmdone', false)}
+							>
+								Node modules installed?
+						</SwitchItem>
+
         </>
     }
 }
