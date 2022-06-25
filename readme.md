@@ -4,6 +4,12 @@ This plugin mostly exists because of ads in youtube watch together, it also bloc
 
 `git clone https://github.com/ghostery/adblocker`
 
+
 After installing head to settings and enable injection.
 
+## **FULLY RESTART YOUR DISCORD AFTER INJECTING**
+
 This plugin modifies powercord's files, im kinda responsible if something borks hmu @yatsukiko#1085 (mention me in powercord server).
+
+
+###### Pull requests are very very welcomed, please save me from my code
