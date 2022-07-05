@@ -2,7 +2,7 @@
 
 This plugin mostly exists because of ads in youtube watch together, but it also blocks any other ads if they exist.
 
-`git clone https://github.com/ghostery/adblocker`
+`git clone https://github.com/yatsukiko/adblocker`
 
 
 After installing head to settings and enable injection.
