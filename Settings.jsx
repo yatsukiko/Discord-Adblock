@@ -10,7 +10,7 @@ module.exports = class Settings extends React.PureComponent {
 								value={getSetting('Dinjected', false)}
 								onChange={() => {this.props.gInject()}}
 							>
-								Inject Dicblock
+								Inject Discord-Adblock
 						</SwitchItem>
 
 

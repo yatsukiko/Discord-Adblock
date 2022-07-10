@@ -1,8 +1,8 @@
 {
-  "name": "Dicblock",
+  "name": "Discord-Adblock",
   "version": "1.0",
   "description": "removes adds, youtube watch together focused mostly",
   "author": "yatsukiko",
   "license": "MIT",
-  "repo": "https://github.com/yatsukiko/dicblock"
+  "repo": "https://github.com/yatsukiko/Discord-Adblock"
 }
