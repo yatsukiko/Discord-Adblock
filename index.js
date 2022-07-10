@@ -7,11 +7,11 @@ const { spawn } = require("child_process");
 const src = join(__dirname,'../../../')
 var imdoingsomethingleavemealone
 
-module.exports = class Dicblock extends Plugin {
+module.exports = class DicordAdblock extends Plugin {
 	startPlugin () {
 	powercord.api.settings.registerSettings(this.entityID, {
 			category: this.entityID,
-			label: 'Dicblock',
+			label: 'Discord-Adblock',
 			render: props => React.createElement(Settings, {...props, gInject})
 		  })
 			const gInject = function() {
